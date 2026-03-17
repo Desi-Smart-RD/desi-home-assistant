@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/main/custom_components/desi/brand/logo.png" width="120" alt="Desi Logo">
+  <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/master/custom_components/desi/brand/logo.png" width="120" alt="Desi Logo">
 </p>
 
 # Desi Smart Integration for Home Assistant
@@ -50,7 +50,7 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 
 ## 📸 Screenshots
 
-<img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/main/custom_components/desi/assests/ha-images/home-page.png" width="650"> <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/main/custom_components/desi/assests/ha-images/device-list.png" width="650"> 
+<img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/master/custom_components/desi/assests/ha-images/home-page.png" width="650"> <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/master/custom_components/desi/assests/ha-images/device-list.png" width="650"> 
 
 ---
 
