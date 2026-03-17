@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "فشلت عملية المصادقة. يرجى التحقق من الإعدادات."
+        },
+        "connection_error": {
+            "message": "تعذر الاتصال بلوحة إنذار Desi: {error}"
+        },
+        "command_failed": {
+            "message": "فشل الأمر! الخطأ: {server_msg}"
+        }
+    }
+}

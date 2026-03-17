@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Autentificarea a eșuat. Verificați configurația."
+        },
+        "connection_error": {
+            "message": "Nu s-a putut comunica cu panoul de alarmă Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Comanda a eșuat! Eroare: {server_msg}"
+        }
+    }
+}

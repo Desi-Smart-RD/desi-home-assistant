@@ -1,0 +1,18 @@
+{
+    "domain": "desi",
+    "name": "Desi Smart",
+    "codeowners": [
+        "@CakirsSeyma"
+    ],
+    "config_flow": true,
+    "dependencies": [
+        "http"
+    ],
+    "documentation": "https://github.com/Smart-RD/desi-home-assistant",
+    "iot_class": "cloud_push",
+    "issue_tracker": "https://github.com/Smart-RD/desi-home-assistant/issues",
+    "requirements": [
+        "PyJWT==2.10.1"
+    ],
+    "version": "1.0.2"
+}

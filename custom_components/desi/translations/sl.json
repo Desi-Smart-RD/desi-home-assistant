@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Preverjanje pristnosti ni uspelo. Preverite konfiguracijo."
+        },
+        "connection_error": {
+            "message": "Ni bilo mogoče komunicirati z alarmno ploščo Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Ukaz ni uspel! Napaka: {server_msg}"
+        }
+    }
+}

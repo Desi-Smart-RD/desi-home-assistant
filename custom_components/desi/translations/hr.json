@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Autentifikacija nije uspjela. Provjerite konfiguraciju."
+        },
+        "connection_error": {
+            "message": "Nije moguće komunicirati s Desi Alarm panelom: {error}"
+        },
+        "command_failed": {
+            "message": "Naredba nije uspjela! Greška: {server_msg}"
+        }
+    }
+}

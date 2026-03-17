@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "האימות נכשל. אנא בדוק את ההגדרות."
+        },
+        "connection_error": {
+            "message": "לא ניתן לתקשר עם לוח האזעקה של Desi: {error}"
+        },
+        "command_failed": {
+            "message": "הפקודה נכשלה! שגיאה: {server_msg}"
+        }
+    }
+}

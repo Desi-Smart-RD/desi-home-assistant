@@ -1,0 +1,16 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Kimlik doğrulama hatası oluştu. Lütfen yapılandırmayı kontrol edin."
+        },
+        "connection_error": {
+            "message": "Desi Smart ile iletişim kurulamadı: {error}"
+        },
+        "command_failed": {
+            "message": "Komut gönderilemedi! Hata: {server_msg}"
+        },
+        "code_required" : {
+            "message" : "Güvenlik nedeniyle açarken şifre girmelisiniz."
+        }
+    }
+}

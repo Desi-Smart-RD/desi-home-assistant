@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Overenie zlyhalo. Skontrolujte konfiguráciu."
+        },
+        "connection_error": {
+            "message": "Nepodarilo sa komunikovať s panelom Desi Alarm: {error}"
+        },
+        "command_failed": {
+            "message": "Príkaz zlyhal! Chyba: {server_msg}"
+        }
+    }
+}

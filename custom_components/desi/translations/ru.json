@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Ошибка аутентификации. Проверьте конфигурацию."
+        },
+        "connection_error": {
+            "message": "Не удалось связаться с панелью сигнализации Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Команда не выполнена! Ошибка: {server_msg}"
+        }
+    }
+}

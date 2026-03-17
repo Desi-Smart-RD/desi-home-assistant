@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Échec de l’authentification. Veuillez vérifier la configuration."
+        },
+        "connection_error": {
+            "message": "Impossible de communiquer avec le panneau d’alarme Desi : {error}"
+        },
+        "command_failed": {
+            "message": "La commande a échoué ! Erreur : {server_msg}"
+        }
+    }
+}

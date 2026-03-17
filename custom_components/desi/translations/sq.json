@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Autentikimi dështoi. Ju lutemi kontrolloni konfigurimin."
+        },
+        "connection_error": {
+            "message": "Nuk u arrit komunikimi me panelin e alarmit Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Komanda dështoi! Gabim: {server_msg}"
+        }
+    }
+}

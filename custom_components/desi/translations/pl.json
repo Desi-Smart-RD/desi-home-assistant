@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Uwierzytelnianie nie powiodło się. Sprawdź konfigurację."
+        },
+        "connection_error": {
+            "message": "Nie można połączyć się z panelem alarmowym Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Polecenie nie powiodło się! Błąd: {server_msg}"
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Autentifikasiya uğursuz oldu. Zəhmət olmasa konfiqurasiyanı yoxlayın."
+        },
+        "connection_error": {
+            "message": "Desi Alarm paneli ilə əlaqə qurulmadı: {error}"
+        },
+        "command_failed": {
+            "message": "Əmr icra olunmadı! Xəta: {server_msg}"
+        }
+    }
+}

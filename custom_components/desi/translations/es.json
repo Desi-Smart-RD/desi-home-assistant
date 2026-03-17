@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "La autenticación falló. Por favor, revise la configuración."
+        },
+        "connection_error": {
+            "message": "No se pudo comunicar con el panel de alarma Desi: {error}"
+        },
+        "command_failed": {
+            "message": "¡El comando falló! Error: {server_msg}"
+        }
+    }
+}

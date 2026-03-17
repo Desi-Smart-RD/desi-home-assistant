@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie die Konfiguration."
+        },
+        "connection_error": {
+            "message": "Kommunikation mit dem Desi-Alarm-Panel nicht möglich: {error}"
+        },
+        "command_failed": {
+            "message": "Befehl fehlgeschlagen! Fehler: {server_msg}"
+        }
+    }
+}

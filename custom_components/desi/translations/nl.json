@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Authenticatie mislukt. Controleer de configuratie."
+        },
+        "connection_error": {
+            "message": "Kan niet communiceren met het Desi Alarm-paneel: {error}"
+        },
+        "command_failed": {
+            "message": "Opdracht mislukt! Fout: {server_msg}"
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Authentication failed. Please check configuration."
+        },
+        "connection_error": {
+            "message": "Could not communicate with Desi Smart: {error}"
+        },
+        "command_failed": {
+            "message": "Command failed! Error: {server_msg}"
+        }
+    }
+}

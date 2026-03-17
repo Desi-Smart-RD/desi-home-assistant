@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Помилка автентифікації. Перевірте конфігурацію."
+        },
+        "connection_error": {
+            "message": "Не вдалося зв’язатися з панеллю сигналізації Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Команда не виконана! Помилка: {server_msg}"
+        }
+    }
+}

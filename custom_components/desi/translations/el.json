@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Η πιστοποίηση απέτυχε. Ελέγξτε τις ρυθμίσεις."
+        },
+        "connection_error": {
+            "message": "Δεν ήταν δυνατή η επικοινωνία με τον πίνακα συναγερμού Desi: {error}"
+        },
+        "command_failed": {
+            "message": "Η εντολή απέτυχε! Σφάλμα: {server_msg}"
+        }
+    }
+}

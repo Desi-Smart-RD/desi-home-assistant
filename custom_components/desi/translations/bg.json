@@ -1,0 +1,13 @@
+{
+    "exceptions": {
+        "auth_failed": {
+            "message": "Неуспешна автентикация. Моля, проверете конфигурацията."
+        },
+        "connection_error": {
+            "message": "Не може да се осъществи връзка с Desi Alarm панела: {error}"
+        },
+        "command_failed": {
+            "message": "Командата е неуспешна! Грешка: {server_msg}"
+        }
+    }
+}
