@@ -24,7 +24,7 @@ class DesiLocalOAuth2Implementation(
         base_url = get_url(self.hass)
         # Hata ayıklama için burayı error seviyesinde logluyoruz
         _LOGGER.info("Redirect Uri: %s", base_url)
-        return f"{base_url}/auth/external/callback"
+        return f"{base_url}/auth/external/callback?desi=1"
 
 
 class DesiConfigFlow(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN):
