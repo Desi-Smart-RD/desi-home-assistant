@@ -14,7 +14,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class DesiLocalOAuth2Implementation(
-    config_entry_oauth2_flow.LocalOAuth2ImplementationWithPkce
+    config_entry_oauth2_flow.LocalOAuth2Implementation
 ):
     """Get redirect uri for callback."""
 
@@ -24,7 +24,7 @@ class DesiLocalOAuth2Implementation(
         base_url = get_url(self.hass)
         # Hata ayıklama için burayı error seviyesinde logluyoruz
         _LOGGER.info("Redirect Uri: %s", base_url)
-        return f"{base_url}/auth/external/callback?desi=1"
+        return f"{base_url}/auth/external/callback"
 
 
 class DesiConfigFlow(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN):
@@ -62,10 +62,9 @@ class DesiConfigFlow(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=
                     self.hass,
                     DOMAIN,
                     "",
-                    AUTH_URI,
-                    TOKEN_URI,
                     "",
-                    128,
+                    AUTH_URI,
+                    TOKEN_URI
                 ),
             )
             implementations = await config_entry_oauth2_flow.async_get_implementations(
