@@ -4,7 +4,7 @@
 
 # Desi Smart Integration for Home Assistant
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![version](https://img.shields.io/github/v/release/Desi-Smart-RD/desi-home-assistant?style=for-the-badge)](https://github.com/Desi-Smart-RD/desi-home-assistant/releases/tag/v1.0.0-alpha)
+[![version](https://img.shields.io/github/v/release/Desi-Smart-RD/desi-home-assistant?style=for-the-badge)](https://github.com/Desi-Smart-RD/desi-home-assistant/releases/tag/v1.0.1)
 
 This custom integration allows you to control and monitor your **Desi Alarm** and **Desi Smart Lock** systems directly from Home Assistant. Automate your home security and keep your peace of mind in one central dashboard.
 
