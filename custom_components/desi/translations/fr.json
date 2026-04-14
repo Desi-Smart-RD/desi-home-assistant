@@ -4,10 +4,34 @@
             "message": "Échec de l’authentification. Veuillez vérifier la configuration."
         },
         "connection_error": {
-            "message": "Impossible de communiquer avec le panneau d’alarme Desi : {error}"
+            "message": "Impossible de communiquer avec Desi Smart : {error}"
         },
         "command_failed": {
-            "message": "La commande a échoué ! Erreur : {server_msg}"
+            "message": "Échec de l’envoi de la commande ! Erreur : {server_msg}"
+        },
+        "code_required": {
+            "message": "Pour des raisons de sécurité, vous devez saisir un code pour déverrouiller."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Niveau de batterie"
+            },
+            "lock_status": {
+                "name": "État du verrou",
+                "state": {
+                    "locked": "Verrouillé",
+                    "unlocked": "Déverrouillé"
+                }
+            },
+            "hub_status": {
+                "name": "Connexion du hub",
+                "state": {
+                    "online": "Connecté",
+                    "offline": "Déconnecté"
+                }
+            }
         }
     }
 }

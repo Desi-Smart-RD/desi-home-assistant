@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Overenie zlyhalo. Skontrolujte konfiguráciu."
+            "message": "Overenie zlyhalo. Skontrolujte prosím konfiguráciu."
         },
         "connection_error": {
-            "message": "Nepodarilo sa komunikovať s panelom Desi Alarm: {error}"
+            "message": "Nepodarilo sa nadviazať spojenie so službou Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Príkaz zlyhal! Chyba: {server_msg}"
+            "message": "Odoslanie príkazu zlyhalo! Chyba: {server_msg}"
+        },
+        "code_required": {
+            "message": "Z bezpečnostných dôvodov musíte na odomknutie zadať kód."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Úroveň batérie"
+            },
+            "lock_status": {
+                "name": "Stav zámku",
+                "state": {
+                    "locked": "Zamknuté",
+                    "unlocked": "Odomknuté"
+                }
+            },
+            "hub_status": {
+                "name": "Pripojenie k hubu",
+                "state": {
+                    "online": "Pripojené",
+                    "offline": "Odpojené"
+                }
+            }
         }
     }
 }

@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Authentication failed. Please check configuration."
+            "message": "Authentication failed. Please check your configuration."
         },
         "connection_error": {
-            "message": "Could not communicate with Desi Smart: {error}"
+            "message": "Unable to communicate with Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Command failed! Error: {server_msg}"
+            "message": "Failed to send command! Error: {server_msg}"
+        },
+        "code_required": {
+            "message": "For security reasons, you must enter a code to unlock."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Battery Level"
+            },
+            "lock_status": {
+                "name": "Lock Status",
+                "state": {
+                    "locked": "Locked",
+                    "unlocked": "Unlocked"
+                }
+            },
+            "hub_status": {
+                "name": "Hub Connection",
+                "state": {
+                    "online": "Connected",
+                    "offline": "Disconnected"
+                }
+            }
         }
     }
 }

@@ -4,10 +4,34 @@
             "message": "Autentikimi dështoi. Ju lutemi kontrolloni konfigurimin."
         },
         "connection_error": {
-            "message": "Nuk u arrit komunikimi me panelin e alarmit Desi: {error}"
+            "message": "Nuk u arrit të komunikohet me Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Komanda dështoi! Gabim: {server_msg}"
+            "message": "Dërgimi i komandës dështoi! Gabim: {server_msg}"
+        },
+        "code_required": {
+            "message": "Për arsye sigurie, duhet të vendosni një kod për të zhbllokuar."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Niveli i baterisë"
+            },
+            "lock_status": {
+                "name": "Statusi i kyçit",
+                "state": {
+                    "locked": "I kyçur",
+                    "unlocked": "I zhbllokuar"
+                }
+            },
+            "hub_status": {
+                "name": "Lidhja e hub-it",
+                "state": {
+                    "online": "I lidhur",
+                    "offline": "I palidhur"
+                }
+            }
         }
     }
 }

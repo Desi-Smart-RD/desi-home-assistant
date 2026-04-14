@@ -4,10 +4,34 @@
             "message": "Autentifikacija nije uspela. Molimo proverite konfiguraciju."
         },
         "connection_error": {
-            "message": "Nije moguće komunicirati sa Desi Alarm panelom: {error}"
+            "message": "Nije moguće uspostaviti komunikaciju sa Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Komanda nije uspela! Greška: {server_msg}"
+            "message": "Slanje komande nije uspelo! Greška: {server_msg}"
+        },
+        "code_required": {
+            "message": "Iz bezbednosnih razloga morate uneti kod za otključavanje."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Nivo baterije"
+            },
+            "lock_status": {
+                "name": "Status brave",
+                "state": {
+                    "locked": "Zaključano",
+                    "unlocked": "Otključano"
+                }
+            },
+            "hub_status": {
+                "name": "Povezanost haba",
+                "state": {
+                    "online": "Povezano",
+                    "offline": "Nije povezano"
+                }
+            }
         }
     }
 }

@@ -4,7 +4,7 @@
 
 # Desi Smart Integration for Home Assistant
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
-[![version](https://img.shields.io/github/v/release/Desi-Smart-RD/desi-home-assistant?style=for-the-badge)](https://github.com/Desi-Smart-RD/desi-home-assistant/releases/tag/v1.0.1)
+[![version](https://img.shields.io/github/v/release/Desi-Smart-RD/desi-home-assistant?style=for-the-badge)](https://github.com/Desi-Smart-RD/desi-home-assistant/releases/tag/v1.0.2)
 
 This custom integration allows you to control and monitor your **Desi Alarm** and **Desi Smart Lock** systems directly from Home Assistant. Automate your home security and keep your peace of mind in one central dashboard.
 
@@ -21,7 +21,7 @@ This custom integration allows you to control and monitor your **Desi Alarm** an
 
 ## 🚀 Installation
 
-### Method 1: HACS (Recommended ✨)
+### HACS
 
 While this integration is pending official HACS inclusion, you can add it as a custom repository:
 
@@ -31,13 +31,6 @@ While this integration is pending official HACS inclusion, you can add it as a c
 4.  **Category:** Select `Integration` and click **Add**.
 5.  Search for "Desi Smart" in HACS, click **Download**, and **Restart Home Assistant.**
 
-### Method 2: Manual Installation
-
-1.  Download the latest release as a `.zip` file.
-2.  Extract the contents and copy the `custom_components/desi` folder into your Home Assistant's `custom_components` directory.
-3.  **Restart Home Assistant.**
-
----
 
 ## ⚙️ Configuration
 
@@ -64,4 +57,3 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 
 If you encounter any bugs or have feature requests, please feel free to open an [Issue](https://github.com/Desi-Smart-RD/desi-home-assistant.git).
 
-If you find this integration useful, don't forget to give this repository a ⭐!

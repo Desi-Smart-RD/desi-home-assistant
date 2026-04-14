@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Autentificarea a eșuat. Verificați configurația."
+            "message": "Autentificare eșuată. Vă rugăm să verificați configurația."
         },
         "connection_error": {
-            "message": "Nu s-a putut comunica cu panoul de alarmă Desi: {error}"
+            "message": "Nu s-a putut comunica cu Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Comanda a eșuat! Eroare: {server_msg}"
+            "message": "Trimiterea comenzii a eșuat! Eroare: {server_msg}"
+        },
+        "code_required": {
+            "message": "Din motive de securitate, trebuie să introduceți un cod pentru deblocare."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Nivel baterie"
+            },
+            "lock_status": {
+                "name": "Stare încuietoare",
+                "state": {
+                    "locked": "Blocat",
+                    "unlocked": "Deblocat"
+                }
+            },
+            "hub_status": {
+                "name": "Conexiune hub",
+                "state": {
+                    "online": "Conectat",
+                    "offline": "Deconectat"
+                }
+            }
         }
     }
 }

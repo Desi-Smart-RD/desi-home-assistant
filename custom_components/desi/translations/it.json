@@ -4,10 +4,34 @@
             "message": "Autenticazione non riuscita. Controlla la configurazione."
         },
         "connection_error": {
-            "message": "Impossibile comunicare con il pannello di allarme Desi: {error}"
+            "message": "Impossibile comunicare con Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Comando non riuscito! Errore: {server_msg}"
+            "message": "Invio del comando non riuscito! Errore: {server_msg}"
+        },
+        "code_required": {
+            "message": "Per motivi di sicurezza è necessario inserire un codice per lo sblocco."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Livello batteria"
+            },
+            "lock_status": {
+                "name": "Stato serratura",
+                "state": {
+                    "locked": "Bloccato",
+                    "unlocked": "Sbloccato"
+                }
+            },
+            "hub_status": {
+                "name": "Connessione hub",
+                "state": {
+                    "online": "Connesso",
+                    "offline": "Disconnesso"
+                }
+            }
         }
     }
 }

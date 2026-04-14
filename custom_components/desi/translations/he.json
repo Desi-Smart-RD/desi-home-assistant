@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "האימות נכשל. אנא בדוק את ההגדרות."
+            "message": "האימות נכשל. אנא בדקו את ההגדרות."
         },
         "connection_error": {
-            "message": "לא ניתן לתקשר עם לוח האזעקה של Desi: {error}"
+            "message": "לא ניתן לתקשר עם Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "הפקודה נכשלה! שגיאה: {server_msg}"
+            "message": "שליחת הפקודה נכשלה! שגיאה: {server_msg}"
+        },
+        "code_required": {
+            "message": "מטעמי אבטחה יש להזין קוד לפתיחה."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "רמת סוללה"
+            },
+            "lock_status": {
+                "name": "מצב מנעול",
+                "state": {
+                    "locked": "נעול",
+                    "unlocked": "לא נעול"
+                }
+            },
+            "hub_status": {
+                "name": "חיבור רכזת",
+                "state": {
+                    "online": "מחובר",
+                    "offline": "מנותק"
+                }
+            }
         }
     }
 }

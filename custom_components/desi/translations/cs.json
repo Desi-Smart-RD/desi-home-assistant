@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Ověření selhalo. Zkontrolujte konfiguraci."
+            "message": "Autentizace selhala. Zkontrolujte prosím konfiguraci."
         },
         "connection_error": {
-            "message": "Nelze komunikovat s panelem Desi Alarm: {error}"
+            "message": "Nelze komunikovat se službou Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Příkaz selhal! Chyba: {server_msg}"
+            "message": "Nepodařilo se odeslat příkaz! Chyba: {server_msg}"
+        },
+        "code_required": {
+            "message": "Z bezpečnostních důvodů musíte pro odemknutí zadat kód."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Úroveň baterie"
+            },
+            "lock_status": {
+                "name": "Stav zámku",
+                "state": {
+                    "locked": "Uzamčeno",
+                    "unlocked": "Odemčeno"
+                }
+            },
+            "hub_status": {
+                "name": "Připojení hubu",
+                "state": {
+                    "online": "Připojeno",
+                    "offline": "Odpojeno"
+                }
+            }
         }
     }
 }

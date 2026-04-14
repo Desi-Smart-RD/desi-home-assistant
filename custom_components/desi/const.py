@@ -24,5 +24,5 @@ PLATFORMS = [
     Platform.LOCK,
     Platform.ALARM_CONTROL_PANEL,
     Platform.SWITCH,
-    Platform.SENSOR,
+    Platform.SENSOR
 ]

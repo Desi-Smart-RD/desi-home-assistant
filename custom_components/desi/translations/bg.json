@@ -4,10 +4,34 @@
             "message": "Неуспешна автентикация. Моля, проверете конфигурацията."
         },
         "connection_error": {
-            "message": "Не може да се осъществи връзка с Desi Alarm панела: {error}"
+            "message": "Не може да се осъществи връзка с Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Командата е неуспешна! Грешка: {server_msg}"
+            "message": "Неуспешно изпращане на команда! Грешка: {server_msg}"
+        },
+        "code_required": {
+            "message": "От съображения за сигурност трябва да въведете код за отключване."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Ниво на батерията"
+            },
+            "lock_status": {
+                "name": "Състояние на ключалката",
+                "state": {
+                    "locked": "Заключено",
+                    "unlocked": "Отключено"
+                }
+            },
+            "hub_status": {
+                "name": "Свързаност с хъба",
+                "state": {
+                    "online": "Свързано",
+                    "offline": "Несвързано"
+                }
+            }
         }
     }
 }

@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "La autenticación falló. Por favor, revise la configuración."
+            "message": "Error de autenticación. Por favor, verifica la configuración."
         },
         "connection_error": {
-            "message": "No se pudo comunicar con el panel de alarma Desi: {error}"
+            "message": "No se pudo comunicar con Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "¡El comando falló! Error: {server_msg}"
+            "message": "¡No se pudo enviar el comando! Error: {server_msg}"
+        },
+        "code_required": {
+            "message": "Por motivos de seguridad, debes introducir un código para desbloquear."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Nivel de batería"
+            },
+            "lock_status": {
+                "name": "Estado de la cerradura",
+                "state": {
+                    "locked": "Bloqueado",
+                    "unlocked": "Desbloqueado"
+                }
+            },
+            "hub_status": {
+                "name": "Conexión del hub",
+                "state": {
+                    "online": "Conectado",
+                    "offline": "Desconectado"
+                }
+            }
         }
     }
 }

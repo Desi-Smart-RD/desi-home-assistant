@@ -9,8 +9,29 @@
         "command_failed": {
             "message": "Komut gönderilemedi! Hata: {server_msg}"
         },
-        "code_required" : {
-            "message" : "Güvenlik nedeniyle açarken şifre girmelisiniz."
+        "code_required": {
+            "message": "Güvenlik nedeniyle açarken şifre girmelisiniz."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Batarya Seviyesi"
+            },
+            "lock_status": {
+                "name": "Kilit Durumu",
+                "state": {
+                    "locked": "Kilitli",
+                    "unlocked": "Kilitli Değil"
+                }
+            },
+            "hub_status" : {
+            "name"  : "Köprü Bağlantısı",
+            "state" : {
+                "online" : "Bağlı",
+                "offline" :"Bağlantı Yok"
+            }
+            }
         }
     }
 }

@@ -4,10 +4,34 @@
             "message": "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie die Konfiguration."
         },
         "connection_error": {
-            "message": "Kommunikation mit dem Desi-Alarm-Panel nicht möglich: {error}"
+            "message": "Keine Verbindung zu Desi Smart möglich: {error}"
         },
         "command_failed": {
-            "message": "Befehl fehlgeschlagen! Fehler: {server_msg}"
+            "message": "Befehl konnte nicht gesendet werden! Fehler: {server_msg}"
+        },
+        "code_required": {
+            "message": "Aus Sicherheitsgründen müssen Sie einen Code zum Entsperren eingeben."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Batteriestand"
+            },
+            "lock_status": {
+                "name": "Schlossstatus",
+                "state": {
+                    "locked": "Gesperrt",
+                    "unlocked": "Entsperrt"
+                }
+            },
+            "hub_status": {
+                "name": "Hub-Verbindung",
+                "state": {
+                    "online": "Verbunden",
+                    "offline": "Getrennt"
+                }
+            }
         }
     }
 }

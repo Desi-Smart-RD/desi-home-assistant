@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Preverjanje pristnosti ni uspelo. Preverite konfiguracijo."
+            "message": "Preverjanje pristnosti ni uspelo. Prosimo, preverite konfiguracijo."
         },
         "connection_error": {
-            "message": "Ni bilo mogoče komunicirati z alarmno ploščo Desi: {error}"
+            "message": "Ni mogoče vzpostaviti povezave z Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Ukaz ni uspel! Napaka: {server_msg}"
+            "message": "Pošiljanje ukaza ni uspelo! Napaka: {server_msg}"
+        },
+        "code_required": {
+            "message": "Iz varnostnih razlogov morate za odklep vnesti kodo."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "Raven baterije"
+            },
+            "lock_status": {
+                "name": "Stanje ključavnice",
+                "state": {
+                    "locked": "Zaklenjeno",
+                    "unlocked": "Odklenjeno"
+                }
+            },
+            "hub_status": {
+                "name": "Povezava z vozliščem",
+                "state": {
+                    "online": "Povezano",
+                    "offline": "Nepovezano"
+                }
+            }
         }
     }
 }

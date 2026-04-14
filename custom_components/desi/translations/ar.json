@@ -1,13 +1,37 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "فشلت عملية المصادقة. يرجى التحقق من الإعدادات."
+            "message": "فشل المصادقة. يرجى التحقق من الإعدادات."
         },
         "connection_error": {
-            "message": "تعذر الاتصال بلوحة إنذار Desi: {error}"
+            "message": "تعذر الاتصال بـ Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "فشل الأمر! الخطأ: {server_msg}"
+            "message": "فشل إرسال الأمر! خطأ: {server_msg}"
+        },
+        "code_required": {
+            "message": "لأسباب أمنية يجب إدخال رمز لفتح القفل."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "battery_status": {
+                "name": "مستوى البطارية"
+            },
+            "lock_status": {
+                "name": "حالة القفل",
+                "state": {
+                    "locked": "مقفل",
+                    "unlocked": "غير مقفل"
+                }
+            },
+            "hub_status": {
+                "name": "اتصال المركز",
+                "state": {
+                    "online": "متصل",
+                    "offline": "غير متصل"
+                }
+            }
         }
     }
 }
