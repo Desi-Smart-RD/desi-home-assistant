@@ -41,6 +41,10 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 3.  Search for **"Desi Smart"**.
 4.  Enter your Desi Login Web credentials to authenticate.
 
+## 🔒 Compatible Devices
+
+COMPATIBLE WITH Utopic R (Device Type AD), Utopic R+, Utopic RX, and Utopic RXe.
+
 ## 📸 Screenshots
 
 <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/master/custom_components/desi/assests/ha-images/home-page.png" width="650"> <img src="https://raw.githubusercontent.com/Desi-Smart-RD/desi-home-assistant/master/custom_components/desi/assests/ha-images/device-list.png" width="650"> 
