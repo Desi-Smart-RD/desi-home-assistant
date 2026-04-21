@@ -59,5 +59,6 @@ COMPATIBLE WITH Utopic R (Device Type AD), Utopic R+, Utopic RX, and Utopic RXe.
 
 ## 🤝 Support and Contribution
 
-If you encounter any bugs or have feature requests, please feel free to open an [Issue](https://github.com/Desi-Smart-RD/desi-home-assistant.git).
+If you experience any issues, please send an email to **[bilgi@desi.com.tr](mailto:bilgi@desi.com.tr)**, and our support team will assist you.
+
 
