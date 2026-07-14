@@ -12,7 +12,7 @@
     "iot_class": "cloud_push",
     "issue_tracker": "https://github.com/Desi-Smart-RD/desi-home-assistant/issues",
     "requirements": [
-        "PyJWT==2.10.1"
+        "PyJWT>=2.10.1"
     ],
     "version": "1.0.2"
 }
