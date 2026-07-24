@@ -1,4 +1,4 @@
-"""Handle Desi web socket connection."""
+"""Handle Desi Smart web-socket connection."""
 
 import asyncio
 import json
@@ -63,7 +63,7 @@ class DesiGateway:
                 token = self._session.token["access_token"]
 
                 _LOGGER.debug("Connecting to WebSocket...")
-                async with websession.ws_connect(  # pyright: ignore[reportAttributeAccessIssue]
+                async with websession.ws_connect(
                     WS_URL,
                     headers={
                         "Authorization": f"Bearer {token}",
@@ -80,20 +80,20 @@ class DesiGateway:
                         if self._stopping:
                             break
 
-                        if msg.type == aiohttp.WSMsgType.TEXT:  # pyright: ignore[reportAttributeAccessIssue]
+                        if msg.type == aiohttp.WSMsgType.TEXT:
                             await self._handle_message_async(msg.data)
 
-                        elif msg.type == aiohttp.WSMsgType.CLOSED:  # pyright: ignore[reportAttributeAccessIssue]
+                        elif msg.type == aiohttp.WSMsgType.CLOSED:
                             _LOGGER.warning("WebSocket kapandı (Remote Closed)")
                             break
-                        elif msg.type == aiohttp.WSMsgType.ERROR:  # pyright: ignore[reportAttributeAccessIssue]
+                        elif msg.type == aiohttp.WSMsgType.ERROR:
                             _LOGGER.error("WebSocket hatası!")
                             break
 
             except aiohttp.ClientError as client_err:
-                _LOGGER.error("WebSocket connectşon error: %s", client_err)
+                _LOGGER.error("WebSocket connection error: %s", client_err)
             except Exception:
-                _LOGGER.exception("WebSocket connectşon error")
+                _LOGGER.exception("WebSocket connection error")
             if not self._stopping:
                 _LOGGER.debug("Socket disconnected, retrying in 30 seconds...")
                 await asyncio.sleep(30)

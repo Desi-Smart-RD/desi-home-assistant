@@ -3,17 +3,15 @@
 import json
 import logging
 
-import aiohttp
-
 from homeassistant.components.lock import LockEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
-from homeassistant.helpers.dispatcher import async_dispatcher_send, dispatcher_send
+from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .const import DOMAIN, FULLFILMENT_API_URI
+from .const import DOMAIN, FULLFILMENT_API_URI, LockIsJammed, LockStatus, OnlineStatus
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,23 +22,15 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Desi Lock entities from a config entry."""
-
     data_pack = hass.data[DOMAIN][entry.entry_id]
     session = data_pack["session"]
     gateway = data_pack["gateway"]
-
-    try:
-        resp = await session.async_request("POST", f"{FULLFILMENT_API_URI}/get-locks")
-        resp.raise_for_status()
-        json_data = await resp.json()
-        devices = json_data.get("data", {}).get("locks", [])
-    except (aiohttp.ClientError, TimeoutError, ValueError) as err:
-        _LOGGER.error("Failed to fetch locks from API: %s", err)
-        return
+    coordinator = data_pack["coordinator"]
+    devices = coordinator.data.locks
 
     entities = [DesiLock(session, gateway, device_data) for device_data in devices]
 
-    async_add_entities(entities, update_before_add=True)
+    async_add_entities(entities)
 
 
 class DesiLock(LockEntity, RestoreEntity):
@@ -69,15 +59,12 @@ class DesiLock(LockEntity, RestoreEntity):
 
     def _handle_update(self, msg_data):
         """Handle updated state data received from WebSocket."""
-
         if msg_data:
             self._data.update(msg_data)
-
             self._is_locking = False
             self._is_unlocking = False
 
             self.async_write_ha_state()
-
             dispatcher_send(self.hass, f"update_{self._device_id}", msg_data)
 
     @property
@@ -85,24 +72,24 @@ class DesiLock(LockEntity, RestoreEntity):
         """Return device registry information for Home Assistant."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": self._data.get("deviceName", "Desi Lock"),
-            "manufacturer": "Desi Smart Lock and Security Systems",
+            "name": self._data.get("deviceName", "Desi"),
+            "manufacturer": "Desi Smart Lock",
             "model": self._data.get("deviceModel"),
             "sw_version": self._data.get("firmwareVersion"),
             "hw_version": self._data.get("hardwareVersion"),
-            "suggested_area": self._data.get("deviceName")
+            "suggested_area": self._data.get("deviceName"),
         }
 
     @property
     def code_format(self) -> str | None:
-        """Return the required code format, or None if no code is required."""
+        """Return the required code format."""
         if self.is_locked:
             return r"^\d*$"
         return None
 
     @property
     def should_poll(self) -> bool:
-        """Disable polling."""
+        """Disable polling. Websocket drives updates."""
         return False
 
     @property
@@ -115,75 +102,65 @@ class DesiLock(LockEntity, RestoreEntity):
         """Return True if the lock is currently unlocking."""
         return self._is_unlocking
 
-    async def async_update(self):
-        """Fetch the latest state directly from the API."""
-        try:
-            resp = await self._session.async_request(
-                "POST", f"{FULLFILMENT_API_URI}/get-locks"
-            )
-            resp.raise_for_status()
-            json_data = await resp.json()
-            locks = json_data.get("data", {}).get("locks", [])
-
-            for lock in locks:
-                if str(lock.get("deviceId")) == self._device_id:
-                    self._data = lock
-                    self._is_locking = False
-                    self._is_unlocking = False
-                    async_dispatcher_send(self.hass, f"update_{self._device_id}", lock)
-                    break
-        except Exception:
-            _LOGGER.exception("Error: %s")
-
     @property
-    def is_locked(self) -> bool:
-        """Return True if the lock is locked."""
+    def is_locked(self) -> bool | None:
+        """Return true if lock is locked."""
         try:
-            val = int(self._data.get("status", 0))
+            val = int(self._data.get("status"))
         except (ValueError, TypeError):
-            return False
-        return val == 1
+            return None
+        return val == LockStatus.LOCKED
 
     @property
-    def is_unlocked(self) -> bool:
+    def is_unlocked(self) -> bool | None:
         """Return True if the lock is unlocked."""
         try:
-            val = int(self._data.get("status", 1))
+            val = int(self._data.get("status"))
         except (ValueError, TypeError):
-            return False
-        return val == 0
+            return None
+        return val == LockStatus.UNLOCKED
 
     @property
-    def is_jammed(self) -> bool:
+    def is_jammed(self) -> bool | None:
         """Return True if the lock is jammed."""
         try:
-            val = int(self._data.get("isJammed", 0))
+            val = int(self._data.get("isJammed"))
         except (ValueError, TypeError):
-            return False
-        return val == 1
+            return None
+        return val == LockIsJammed.JAMMED
 
     @property
     def available(self) -> bool:
-        """Return True if the lock is online and available."""
-        return str(self._data.get("isOnline")) == "1"
+        """Return True if the lock is online."""
+        try:
+            val = int(self._data.get("isOnline"))
+        except (ValueError, TypeError):
+            return False
+        return val == OnlineStatus.ONLINE
 
     @property
     def extra_state_attributes(self):
         """Return entity specific state attributes."""
         return {
             "Battery Level": self._data.get("batteryLevel"),
-            "Online": str(str(self._data.get("isOnline")) == "1"),
+            "Online": self.available,
             "Firmware Version": self._data.get("firmwareVersion"),
             "Device Version": self._data.get("deviceVersion"),
             "Device Model": self._data.get("deviceModel"),
         }
 
     async def _send_command(self, operation_type, code):
-        """Send a control command to the API."""
+        """Send command to the API."""
         url = f"{FULLFILMENT_API_URI}/lock-unlock-command"
-
         await self._session.async_ensure_token_valid()
         access_token = self._session.token["access_token"]
+
+        _LOGGER.debug(
+            "Sending command to API: %s, code: %s, access_token: %s",
+            operation_type,
+            code,
+            access_token,
+        )
 
         payload = {
             "token": access_token,
@@ -197,7 +174,6 @@ class DesiLock(LockEntity, RestoreEntity):
         if resp.status >= 400:
             error_body = await resp.text()
             msg_text = error_body
-
             try:
                 if error_body:
                     err_json = json.loads(error_body)
@@ -207,7 +183,6 @@ class DesiLock(LockEntity, RestoreEntity):
                 pass
 
             _LOGGER.warning("Server Message -> %s", msg_text)
-
             self._is_locking = False
             self._is_unlocking = False
             self.async_write_ha_state()
@@ -221,12 +196,16 @@ class DesiLock(LockEntity, RestoreEntity):
     async def async_lock(self, **kwargs):
         """Send lock command."""
         code = kwargs.get("code")
-
         self._is_locking = True
         self._is_unlocking = False
         self.async_write_ha_state()
 
-        await self._send_command("LOCK", code)
+        try:
+            await self._send_command("LOCK", code)
+        except Exception:
+            self._is_locking = False
+            self.async_write_ha_state()
+            raise
 
     async def async_unlock(self, **kwargs):
         """Send unlock command."""
@@ -240,4 +219,9 @@ class DesiLock(LockEntity, RestoreEntity):
         self._is_unlocking = True
         self.async_write_ha_state()
 
-        await self._send_command("UNLOCK", code)
+        try:
+            await self._send_command("UNLOCK", code)
+        except Exception:
+            self._is_unlocking = False
+            self.async_write_ha_state()
+            raise

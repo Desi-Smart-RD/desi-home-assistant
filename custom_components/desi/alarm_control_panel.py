@@ -1,10 +1,8 @@
-"""Handle Alarm Operations."""
+"""Handle Desi Alarm Operations."""
 
 import json
 import logging
 from typing import Any
-
-import aiohttp
 
 from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntity,
@@ -18,18 +16,16 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .const import DOMAIN, FULLFILMENT_API_URI
+from .const import (
+    DOMAIN,
+    FULLFILMENT_API_URI,
+    AlarmModes,
+    AlarmStatus,
+    OnlineStatus,
+    RingingStatus,
+)
 
 _LOGGER = logging.getLogger(__name__)
-
-# consts
-STATUS_DISARMED = 0
-STATUS_ARMED = 1
-MODE_AWAY = 0
-MODE_HOME = 1
-RINGING_OFF = 0
-RINGING_ON = 1
-
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -40,15 +36,8 @@ async def async_setup_entry(
     data_pack = hass.data[DOMAIN][entry.entry_id]
     session = data_pack["session"]
     gateway = data_pack["gateway"]
-
-    try:
-        resp = await session.async_request("POST", f"{FULLFILMENT_API_URI}/get-alarms")
-        resp.raise_for_status()
-        json_data = await resp.json()
-        devices = json_data.get("data", {}).get("alarms", [])
-    except (aiohttp.ClientError, TimeoutError, ValueError) as err:
-        _LOGGER.error("Failed to fetch alarms from API: %s", err)
-        return
+    coordinator = data_pack["coordinator"]
+    devices = coordinator.data.alarms
 
     entities = [DesiAlarm(session, gateway, device_data) for device_data in devices]
 
@@ -79,7 +68,6 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
             | AlarmControlPanelEntityFeature.TRIGGER
         )
 
-        # Disable opposite arming options if already armed
         if self.state == AlarmControlPanelState.ARMED_HOME:
             features &= ~AlarmControlPanelEntityFeature.ARM_AWAY
         if self.state == AlarmControlPanelState.ARMED_AWAY:
@@ -104,14 +92,14 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
         except (ValueError, TypeError):
             return None
 
-        if ringing == RINGING_ON:
+        if ringing == RingingStatus.RINGING_ON:
             return AlarmControlPanelState.TRIGGERED
-        if status == STATUS_DISARMED:
+        if status == AlarmStatus.DISARMED:
             return AlarmControlPanelState.DISARMED
-        if status == STATUS_ARMED:
-            if is_armed_away_mode == MODE_AWAY and ringing == RINGING_OFF:
+        if status == AlarmStatus.ARMED:
+            if is_armed_away_mode == AlarmModes.MODE_AWAY and ringing == RingingStatus.RINGING_OFF:
                 return AlarmControlPanelState.ARMED_AWAY
-            if is_armed_away_mode == MODE_HOME and ringing == RINGING_OFF:
+            if is_armed_away_mode == AlarmModes.MODE_STAY_ARMED and ringing == RingingStatus.RINGING_OFF:
                 return AlarmControlPanelState.ARMED_HOME
 
         return None
@@ -137,7 +125,7 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
     @property
     def available(self) -> bool:
         """Return True if the alarm system is online."""
-        return str(self._data.get("isOnline")) == "1"
+        return self._data.get("isOnline") == OnlineStatus.ONLINE
 
     @property
     def device_info(self) -> dict[str, Any]:
@@ -149,13 +137,13 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
             "model": self._data.get("deviceModel"),
             "sw_version": self._data.get("firmwareVersion"),
             "hw_version": self._data.get("hardwareVersion"),
-            "suggested_area": self._data.get("deviceName")
+            "suggested_area": self._data.get("deviceName"),
         }
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return entity specific state attributes."""
-        is_online = str(self._data.get("isOnline")) == "1"
+        is_online = self._data.get("isOnline") == OnlineStatus.ONLINE
         return {
             "firmware": self._data.get("firmwareVersion"),
             "hardware": self._data.get("hardwareVersion"),

@@ -1,4 +1,4 @@
-"""The Desi Integration."""
+"""The Desi Smart Integration."""
 
 from __future__ import annotations
 
@@ -13,17 +13,18 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_entry_oauth2_flow
 
 from .const import AUTH_URI, DOMAIN, FULLFILMENT_API_URI, TOKEN_URI
+from .coordinator import DesiDataUpdateCoordinator
 from .gateway import DesiGateway
 
 _LOGGER = logging.getLogger(__name__)
-
 
 
 PLATFORMS: list[Platform] = [
     Platform.LOCK,
     Platform.ALARM_CONTROL_PANEL,
     Platform.SWITCH,
-    Platform.SENSOR
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
 ]
 
 
@@ -58,29 +59,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 hass, entry
             )
         )
-        _LOGGER.debug("OAuth Implementation successfully retrieved: %s", implementation)
-
     except Exception as e:
         _LOGGER.warning("Implementation not ready yet, will retry: %s", e)
         raise ConfigEntryNotReady from e
 
     session = config_entry_oauth2_flow.OAuth2Session(hass, entry, implementation)
 
-    if session.token:
-        _LOGGER.debug("Current Token Expires At: %s", session.token.get("expires_at"))
-    else:
-        _LOGGER.warning("No TOKEN found in the session!")
+    coordinator = DesiDataUpdateCoordinator(hass, session, entry)
 
     try:
-        _LOGGER.debug("Fetching devices from Desi API...")
-        resp = await session.async_request("POST", f"{FULLFILMENT_API_URI}/get-locks")
-        resp.raise_for_status()
-        json_data = await resp.json()
-        devices = json_data.get("data", {}).get("locks", [])
-        _LOGGER.debug("Successfully fetched %s devices.", len(devices))
+        await coordinator.async_config_entry_first_refresh()
     except Exception as err:
-        _LOGGER.error("Failed to fetch locks from API during setup: %s", err)
-        raise ConfigEntryNotReady("Could not fetch devices from API") from err
+        _LOGGER.error("Initial refresh failed: %s", err)
+        raise ConfigEntryNotReady(f"Could not connect to API: {err}")
 
     try:
         _LOGGER.debug("Initializing Gateway class...")
@@ -89,20 +80,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN][entry.entry_id] = {
             "session": session,
             "gateway": gateway,
-            "devices": devices
+            "coordinator": coordinator,
         }
 
-        _LOGGER.debug("Creating background task (WebSocket listen)...")
         entry.async_create_background_task(hass, gateway.start_listen(), "desi_ws_loop")
 
-        _LOGGER.debug("Forwarding platform setups: %s", PLATFORMS)
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-        _LOGGER.debug("async_setup_entry completed successfully.")
-        return True  # noqa: TRY300
+        return True
 
     except Exception as e:
-        _LOGGER.exception("Unexpected error occurred during setup: %s", e)  # noqa: TRY401
+        _LOGGER.exception("Unexpected error occurred during setup: %s", e)
         return False
 
 
@@ -146,9 +133,7 @@ async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
             _LOGGER.info("User successfully disconnected from server.")
         else:
             text = await resp.text()
-            _LOGGER.warning(
-                "Server disconnect error: %s - Body: %s", resp.status, text
-            )
+            _LOGGER.warning("Server disconnect error: %s - Body: %s", resp.status, text)
 
     except (aiohttp.ClientError, TimeoutError) as err:
         _LOGGER.warning("Could not reach server while removing integration: %s", err)

@@ -1,8 +1,8 @@
-"""Config flow for Desi OAuth2 integration."""
+"""Config flow for Desi Smart OAuth2 integration."""
 
 import logging
 
-import jwt  # type: ignore  # noqa: PGH003
+import jwt
 
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
@@ -48,7 +48,7 @@ class DesiConfigFlow(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=
                 if isinstance(impl, DesiLocalOAuth2Implementation)
             ),
             None,
-        )  # type: ignore  # noqa: PGH003
+        )
 
         if self.flow_impl is None:
             config_entry_oauth2_flow.async_register_implementation(
@@ -67,7 +67,6 @@ class DesiConfigFlow(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=
                 if isinstance(impl, DesiLocalOAuth2Implementation)
             )
 
-        # Redirect the user directly to the OAuth authentication page
         return await self.async_step_auth()
 
     async def async_oauth_create_entry(self, data: dict) -> ConfigFlowResult:

@@ -9,10 +9,11 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .const import DOMAIN, FULLFILMENT_API_URI
+from .const import DOMAIN, FULLFILMENT_API_URI, OnlineStatus, SwitchStatus
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,15 +28,9 @@ async def async_setup_entry(
     data_pack = hass.data[DOMAIN][entry.entry_id]
     session = data_pack["session"]
     gateway = data_pack["gateway"]
+    coordinator = data_pack["coordinator"]
+    devices = coordinator.data.switches
 
-    try:
-        resp = await session.async_request("POST", f"{FULLFILMENT_API_URI}/get-switches")
-        resp.raise_for_status()
-        json_data = await resp.json()
-        devices = json_data.get("data", {}).get("switches", [])
-    except Exception:
-        _LOGGER.exception("Error")
-        return
 
     entities = [DesiSwitch(session, gateway, device_data) for device_data in devices]
 
@@ -67,7 +62,7 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
             "suggested_area": self._data.get("deviceName")
         }
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         """Register callbacks when entity is added to Home Assistant."""
         await super().async_added_to_hass()
 
@@ -82,45 +77,31 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
             self._data.update(msg_data)
 
             self.async_write_ha_state()
+            dispatcher_send(self.hass, f"update_{self._device_id}", msg_data)
 
     @property
     def is_on(self) -> bool | None:
-        """Return true if switch is on. Status: 1 = ON, 2 = OFF."""
+        """Return true if switch is on."""
         try:
-            status = int(self._data.get("status", 2))
+            status = int(self._data.get("status"))
         except (ValueError, TypeError):
-            return False
-        return status == 1
+            return None
+        return status == SwitchStatus.ON
 
     @property
     def available(self) -> bool:
-        """Return True if entity is available."""
+        """Return True if the lock is online."""
         try:
-            return int(self._data.get("isOnline", 0)) == 1
+            val = int(self._data.get("isOnline"))
         except (ValueError, TypeError):
             return False
+        return val == OnlineStatus.ONLINE
+
 
     @property
     def should_poll(self) -> bool:
-        """Disable the pooling."""
+        """Disable pooling. Websocket drives updates."""
         return False
-
-    async def async_update(self):
-        """Update the entity state."""
-        try:
-            resp = await self._session.async_request(
-                "POST", f"{FULLFILMENT_API_URI}/get-switches"
-            )
-            resp.raise_for_status()
-            json_data = await resp.json()
-            switches = json_data.get("data", {}).get("switches", [])
-
-            for switch in switches:
-                if str(switch.get("deviceId")) == self._device_id:
-                    self._data = switch
-                    break
-        except Exception:
-            _LOGGER.exception("Error occured!")
 
 
     async def _send_command(self, operation_type):
@@ -166,7 +147,7 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
         """Turn the switch on."""
         _LOGGER.info("async_turn_on")
         await self._send_command("ON")
-        self._data["status"] = 1
+        self._data["status"] = SwitchStatus.ON
         self.async_write_ha_state()
 
 
@@ -174,5 +155,5 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
         """Turn the switch off."""
         _LOGGER.info("async_turn_off")
         await self._send_command("OFF")
-        self._data["status"] = 2
+        self._data["status"] = SwitchStatus.OFF
         self.async_write_ha_state()

@@ -2,7 +2,7 @@
     "domain": "desi",
     "name": "Desi Smart",
     "codeowners": [
-        "@CakirsSeyma"
+        "@Desi-Smart-RD"
     ],
     "config_flow": true,
     "dependencies": [
@@ -14,5 +14,5 @@
     "requirements": [
         "PyJWT>=2.10.1"
     ],
-    "version": "1.0.3"
+    "version": "1.0.4"
 }

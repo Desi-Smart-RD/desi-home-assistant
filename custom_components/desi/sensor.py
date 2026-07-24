@@ -26,10 +26,14 @@ async def async_setup_entry(
 ) -> None:
     """Set up Desi Lock sensors from a config entry."""
     data_pack = hass.data[DOMAIN][entry.entry_id]
+    _LOGGER.info("data_pack")
+    _LOGGER.info(data_pack)
     session = data_pack["session"]
     gateway = data_pack["gateway"]
 
-    devices = data_pack.get("devices", [])
+    coordinator = data_pack.get("coordinator", [])
+
+    devices = coordinator.data.locks
 
     if not devices:
         _LOGGER.warning("No devices found for Desi sensors")
@@ -147,7 +151,7 @@ class DesiLockStatusSensor(SensorEntity, RestoreEntity):
         """Return the icon of the sensor."""
         try:
             status = int(self._data.get("status", 0))
-            return "mdi:lock" if status == 1 else "mdi:lock-open-variant"  # noqa: TRY300
+            return "mdi:lock" if status == 1 else "mdi:lock-open-variant"
         except (ValueError, TypeError):
             return "mdi:lock-question"
 
@@ -195,7 +199,7 @@ class DesiLockAvailabilitySensor(SensorEntity, RestoreEntity):
         try:
             is_online = int(self._data.get("isOnline", 0)) == 1
 
-            return "online" if is_online else "offline"  # noqa: TRY300
+            return "online" if is_online else "offline"
         except (ValueError, TypeError):
             return None
 
@@ -203,3 +207,4 @@ class DesiLockAvailabilitySensor(SensorEntity, RestoreEntity):
     def icon(self) -> str:
         """Return the icon of the sensor."""
         return "mdi:router-wireless" if self.native_value == "online" else "mdi:router-wireless-off"
+

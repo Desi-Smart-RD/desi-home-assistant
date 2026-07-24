@@ -1,6 +1,7 @@
-"""Constants for the Desi."""
+"""Constants for the Desi Smart."""
 
 from homeassistant.const import Platform
+from enum import IntEnum
 
 MANUFACTURER = "Desi Smart Lock and Security Systems"
 DEFAULT_NAME = "Desi Smart"
@@ -24,5 +25,45 @@ PLATFORMS = [
     Platform.LOCK,
     Platform.ALARM_CONTROL_PANEL,
     Platform.SWITCH,
-    Platform.SENSOR
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
 ]
+
+
+class DoorState(IntEnum):
+    UNKNOWN = 0
+    CLOSED = 1
+    OPENED = 2
+
+
+class OnlineStatus(IntEnum):
+    OFFLINE = 0
+    ONLINE = 1
+
+
+class AlarmStatus(IntEnum):
+    DISARMED = 0
+    ARMED = 1
+
+
+class AlarmModes(IntEnum):
+    MODE_AWAY = 0
+    MODE_STAY_ARMED = 1
+
+
+class RingingStatus(IntEnum):
+    RINGING_OFF = 0
+    RINGING_ON = 1
+
+
+class LockStatus(IntEnum):
+    UNLOCKED = 0
+    LOCKED= 1
+
+class LockIsJammed(IntEnum):
+    OK = 0
+    JAMMED = 1
+
+class SwitchStatus(IntEnum):
+    ON = 1
+    OFF = 2

@@ -1,4 +1,4 @@
-"""Application credentials platform for Desi."""
+"""Application credentials platform for Desi Smart."""
 
 from homeassistant.components.application_credentials import AuthorizationServer
 from homeassistant.core import HomeAssistant
