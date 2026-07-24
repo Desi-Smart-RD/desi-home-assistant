@@ -6,7 +6,8 @@
     ],
     "config_flow": true,
     "dependencies": [
-        "http"
+        "http",
+        "diagnostics"
     ],
     "documentation": "https://github.com/Desi-Smart-RD/desi-home-assistant",
     "iot_class": "cloud_push",
