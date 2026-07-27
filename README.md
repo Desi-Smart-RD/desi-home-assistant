@@ -56,6 +56,7 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 | Utopic R+   | ✓           |
 | Utopic RX   | ✓           |
 | Utopic RXe  | ✓           |
+| Auto Closer | V3BL        |
 
 
 ##  Important Notes
@@ -64,7 +65,7 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 > **Cloud Dependency:** This integration requires your Desi Smart system to be connected to the internet and cloud services to be active. It relies on the cloud API to communicate with your locks.
 
 > [!CAUTION]  
-> **Door Status:** Door Status is only available for locks with an auto-closer connected. If no auto-closer is connected, the door status will be shown as Unknown by default. Once an auto-closer is connected, the actual door state will be displayed as Opened or Closed.
+> **Door Status:** Door Status is only available for locks with an auto-closer (V3BL) connected. If no auto-closer is connected, the door status will be shown as Unknown by default. Once an auto-closer is connected, the actual door state will be displayed as Opened or Closed.
 
 
 
