@@ -45,7 +45,7 @@ This integration is configured entirely via the Home Assistant UI (Config Flow).
 2.  Click **Add Integration** in the bottom right.
 3.  Search for **"Desi Smart"**.
 4.  Enter your Desi Login Web credentials to authenticate.
-5.  Create an pin code for device control. Home Assistant will be ask before unlocking and disarm operations.
+5.  Create a PIN code for device control. Home Assistant will request the PIN before performing unlocking or disarming operations
 
 
 ## Compatible Devices
