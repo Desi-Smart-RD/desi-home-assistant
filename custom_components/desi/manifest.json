@@ -15,5 +15,5 @@
     "requirements": [
         "PyJWT>=2.10.1"
     ],
-    "version": "1.0.4"
+    "version": "1.0.5"
 }
