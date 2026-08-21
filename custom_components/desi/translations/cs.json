@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Autentizace selhala. Zkontrolujte prosím konfiguraci."
+            "message": "Ověření se nezdařilo. Zkontrolujte prosím svou konfiguraci."
         },
         "connection_error": {
-            "message": "Nelze komunikovat se službou Desi Smart: {error}"
+            "message": "Nelze komunikovat s Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Nepodařilo se odeslat příkaz! Chyba: {server_msg}"
+            "message": "Odeslání příkazu se nezdařilo! Chyba: {server_msg}"
         },
         "code_required": {
             "message": "Z bezpečnostních důvodů musíte pro odemknutí zadat kód."
+        },
+        "rate_limit_exceeded": {
+            "message": "Byl dosažen limit pro obnovení tokenu. Opakování proběhne později."
         }
     },
     "entity": {
@@ -21,17 +24,23 @@
             "lock_status": {
                 "name": "Stav zámku",
                 "state": {
-                    "locked": "Uzamčeno",
+                    "locked": "Zamčeno",
                     "unlocked": "Odemčeno"
                 }
             },
             "hub_status": {
-                "name": "Připojení hubu",
+                "name": "Připojení rozbočovače",
                 "state": {
                     "online": "Připojeno",
                     "offline": "Odpojeno"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Nepodporovaná verze Home Assistant",
+            "description": "Integraci Desi se nepodařilo spustit, protože vaše verze Home Assistant je příliš stará.\n\nPodrobnosti: {error_detail}\n\nAktualizujte prosím svůj systém, abyste tento problém vyřešili."
         }
     }
 }

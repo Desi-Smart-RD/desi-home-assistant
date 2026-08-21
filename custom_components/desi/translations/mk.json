@@ -1,37 +1,46 @@
 {
-    "exceptions": {
-        "auth_failed": {
-            "message": "Автентикацијата не успеа. Ве молиме проверете ја конфигурацијата."
-        },
-        "connection_error": {
-            "message": "Не може да се воспостави комуникација со Desi Smart: {error}"
-        },
-        "command_failed": {
-            "message": "Испраќањето на командата не успеа! Грешка: {server_msg}"
-        },
-        "code_required": {
-            "message": "Од безбедносни причини мора да внесете код за отклучување."
-        }
+  "exceptions": {
+    "auth_failed": {
+      "message": "Автентикацијата не успеа. Проверете ја вашата конфигурација."
     },
-    "entity": {
-        "sensor": {
-            "battery_status": {
-                "name": "Ниво на батерија"
-            },
-            "lock_status": {
-                "name": "Статус на брава",
-                "state": {
-                    "locked": "Заклучено",
-                    "unlocked": "Отклучено"
-                }
-            },
-            "hub_status": {
-                "name": "Поврзаност со хаб",
-                "state": {
-                    "online": "Поврзано",
-                    "offline": "Неповрзано"
-                }
-            }
-        }
+    "connection_error": {
+      "message": "Не може да се воспостави комуникација со Desi Smart: {error}"
+    },
+    "command_failed": {
+      "message": "Испраќањето на командата не успеа! Грешка: {server_msg}"
+    },
+    "code_required": {
+      "message": "Од безбедносни причини, мора да внесете код за отклучување."
+    },
+    "rate_limit_exceeded": {
+      "message": "Достигнато е ограничувањето за освежување на токенот. Повторниот обид ќе се изврши подоцна."
     }
+  },
+  "entity": {
+    "sensor": {
+      "battery_status": {
+        "name": "Ниво на батеријата"
+      },
+      "lock_status": {
+        "name": "Состојба на бравата",
+        "state": {
+          "locked": "Заклучено",
+          "unlocked": "Отклучено"
+        }
+      },
+      "hub_status": {
+        "name": "Поврзување со хабот",
+        "state": {
+          "online": "Поврзано",
+          "offline": "Исклучено"
+        }
+      }
+    }
+  },
+  "issues": {
+    "unsupported_version": {
+      "title": "Неподдржана верзија на Home Assistant",
+      "description": "Интеграцијата Desi не можеше да се стартува бидејќи вашата верзија на Home Assistant е премногу стара.\n\nДетали: {error_detail}\n\nАжурирајте го вашиот систем за да го решите овој проблем."
+    }
+  }
 }

@@ -9,15 +9,15 @@ from typing import Any
 import aiohttp
 
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import WS_URL
+from .const import DOMAIN, WS_URL
 
 _LOGGER = logging.getLogger(__name__)
 
 
 def parse_json_safe(data: str) -> dict[str, Any] | None:
-    """If the JSON is malformed, attempt to fix it."""
     try:
         return json.loads(data)
     except json.JSONDecodeError:
@@ -32,13 +32,14 @@ def parse_json_safe(data: str) -> dict[str, Any] | None:
 class DesiGateway:
     """Handle the WebSocket connection and message dispatching."""
 
-    def __init__(self, hass: HomeAssistant, session):
+    def __init__(self, hass: HomeAssistant, session, entry):
         """Initilize the gateway connection."""
         self.hass = hass
         self._session = session
         self._listeners = {}
         self._ws = None
         self._stopping = False
+        self.entry = entry
 
     def register_listener(self, device_id, callback):
         """Register a callback for a specific device."""
@@ -59,7 +60,19 @@ class DesiGateway:
 
         while not self._stopping:
             try:
-                await self._session.async_ensure_token_valid()
+
+                try:
+                    await self._session.async_ensure_token_valid()
+                except Exception as err:
+                                if getattr(err, "status", None) == 429:
+                                    _LOGGER.warning("Token refresh rate limit hit. Retrying later.")
+                                    raise ConfigEntryNotReady(
+                                        translation_domain=DOMAIN,
+                                        translation_key="exceptions.rate_limit_exceeded"
+                                    ) from err
+
+                                raise
+
                 token = self._session.token["access_token"]
 
                 _LOGGER.debug("Connecting to WebSocket...")
@@ -71,7 +84,7 @@ class DesiGateway:
                         "Connection": "Upgrade",
                         "Upgrade": "websocket",
                     },
-                    heartbeat=90,
+                    heartbeat=30,
                 ) as ws:
                     self._ws = ws
                     _LOGGER.info("WebSocket Connected!")
@@ -95,8 +108,8 @@ class DesiGateway:
             except Exception:
                 _LOGGER.exception("WebSocket connection error")
             if not self._stopping:
-                _LOGGER.debug("Socket disconnected, retrying in 30 seconds...")
-                await asyncio.sleep(30)
+                _LOGGER.debug("Socket disconnected, retrying in 90 seconds...")
+                await asyncio.sleep(90)
 
     async def _handle_message_async(self, data: str):
         """Process incoming WebSocket messages without blocking the event loop."""

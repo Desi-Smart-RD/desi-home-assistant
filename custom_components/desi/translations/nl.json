@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Authenticatie mislukt. Controleer de configuratie."
+            "message": "Authenticatie mislukt. Controleer uw configuratie."
         },
         "connection_error": {
-            "message": "Kan geen verbinding maken met Desi Smart: {error}"
+            "message": "Kan niet communiceren met Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Verzenden van opdracht mislukt! Fout: {server_msg}"
+            "message": "Kan de opdracht niet verzenden! Fout: {server_msg}"
         },
         "code_required": {
             "message": "Om veiligheidsredenen moet u een code invoeren om te ontgrendelen."
+        },
+        "rate_limit_exceeded": {
+            "message": "De limiet voor het vernieuwen van het token is bereikt. Er wordt later opnieuw geprobeerd."
         }
     },
     "entity": {
@@ -29,9 +32,15 @@
                 "name": "Hubverbinding",
                 "state": {
                     "online": "Verbonden",
-                    "offline": "Niet verbonden"
+                    "offline": "Verbinding verbroken"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Niet-ondersteunde Home Assistant-versie",
+            "description": "De Desi-integratie kon niet worden gestart omdat uw Home Assistant-versie te oud is.\n\nDetails: {error_detail}\n\nWerk uw systeem bij om dit probleem op te lossen."
         }
     }
 }

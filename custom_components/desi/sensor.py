@@ -26,8 +26,6 @@ async def async_setup_entry(
 ) -> None:
     """Set up Desi Lock sensors from a config entry."""
     data_pack = hass.data[DOMAIN][entry.entry_id]
-    _LOGGER.info("data_pack")
-    _LOGGER.info(data_pack)
     session = data_pack["session"]
     gateway = data_pack["gateway"]
 

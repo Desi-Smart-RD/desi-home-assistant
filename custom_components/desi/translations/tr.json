@@ -1,7 +1,7 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Kimlik doğrulama hatası oluştu. Lütfen yapılandırmayı kontrol edin."
+            "message": "Kimlik doğrulama başarısız oldu. Lütfen yapılandırmanızı kontrol edin."
         },
         "connection_error": {
             "message": "Desi Smart ile iletişim kurulamadı: {error}"
@@ -10,28 +10,37 @@
             "message": "Komut gönderilemedi! Hata: {server_msg}"
         },
         "code_required": {
-            "message": "Güvenlik nedeniyle açarken şifre girmelisiniz."
+            "message": "Güvenlik nedeniyle kilidi açmak için bir kod girmelisiniz."
+        },
+        "rate_limit_exceeded": {
+            "message": "Token yenileme limitine ulaşıldı. Daha sonra tekrar denenecek."
         }
     },
     "entity": {
         "sensor": {
             "battery_status": {
-                "name": "Batarya Seviyesi"
+                "name": "Pil Seviyesi"
             },
             "lock_status": {
                 "name": "Kilit Durumu",
                 "state": {
                     "locked": "Kilitli",
-                    "unlocked": "Kilitli Değil"
+                    "unlocked": "Kilidi Açık"
                 }
             },
-            "hub_status" : {
-            "name"  : "Köprü Bağlantısı",
-            "state" : {
-                "online" : "Bağlı",
-                "offline" :"Bağlantı Yok"
+            "hub_status": {
+                "name": "Hub Bağlantısı",
+                "state": {
+                    "online": "Bağlı",
+                    "offline": "Bağlantı Kesildi"
+                }
             }
-            }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Desteklenmeyen Home Assistant Sürümü",
+            "description": "Home Assistant sürümünüz çok eski olduğu için Desi entegrasyonu başlatılamadı.\n\nAyrıntılar: {error_detail}\n\nBu sorunu çözmek için lütfen sisteminizi güncelleyin."
         }
     }
 }

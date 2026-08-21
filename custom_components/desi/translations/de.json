@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie die Konfiguration."
+            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie Ihre Konfiguration."
         },
         "connection_error": {
-            "message": "Keine Verbindung zu Desi Smart möglich: {error}"
+            "message": "Kommunikation mit Desi Smart nicht möglich: {error}"
         },
         "command_failed": {
             "message": "Befehl konnte nicht gesendet werden! Fehler: {server_msg}"
         },
         "code_required": {
-            "message": "Aus Sicherheitsgründen müssen Sie einen Code zum Entsperren eingeben."
+            "message": "Aus Sicherheitsgründen müssen Sie zum Entsperren einen Code eingeben."
+        },
+        "rate_limit_exceeded": {
+            "message": "Das Limit für die Token-Aktualisierung wurde erreicht. Ein erneuter Versuch erfolgt später."
         }
     },
     "entity": {
@@ -21,8 +24,8 @@
             "lock_status": {
                 "name": "Schlossstatus",
                 "state": {
-                    "locked": "Gesperrt",
-                    "unlocked": "Entsperrt"
+                    "locked": "Verriegelt",
+                    "unlocked": "Entriegelt"
                 }
             },
             "hub_status": {
@@ -32,6 +35,12 @@
                     "offline": "Getrennt"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Nicht unterstützte Home-Assistant-Version",
+            "description": "Die Desi-Integration konnte nicht gestartet werden, da Ihre Home-Assistant-Version zu alt ist.\n\nDetails: {error_detail}\n\nBitte aktualisieren Sie Ihr System, um dieses Problem zu beheben."
         }
     }
 }

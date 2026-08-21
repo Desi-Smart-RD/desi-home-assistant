@@ -11,8 +11,10 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_entry_oauth2_flow
+from homeassistant.helpers.entity_platform import ConfigEntryAuthFailed
 
-from .const import AUTH_URI, DOMAIN, FULLFILMENT_API_URI, TOKEN_URI
+from .config_flow import DesiOauth2Implementation
+from .const import AUTH_URI, DOMAIN, FULLFILMENT_API_URI, PUBLIC_ID, TOKEN_URI
 from .coordinator import DesiDataUpdateCoordinator
 from .gateway import DesiGateway
 
@@ -31,13 +33,12 @@ PLATFORMS: list[Platform] = [
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """OAuth provider implementation."""
 
-    implementation = config_entry_oauth2_flow.LocalOAuth2Implementation(
+    implementation = DesiOauth2Implementation(
         hass,
         DOMAIN,
-        client_id="",
-        client_secret="",
-        authorize_url=AUTH_URI,
-        token_url=TOKEN_URI,
+        PUBLIC_ID,
+        AUTH_URI,
+        TOKEN_URI,
     )
 
     config_entry_oauth2_flow.async_register_implementation(
@@ -50,7 +51,6 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up the integration from a config entry."""
     hass.data.setdefault(DOMAIN, {})
 
     try:
@@ -68,6 +68,35 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = DesiDataUpdateCoordinator(hass, session, entry)
 
     try:
+        await session.async_ensure_token_valid()
+    except aiohttp.ClientResponseError as err:
+        if err.status == 401 :
+            _LOGGER.error(
+                "Authentication failed. Please re-authenticate the integration."
+            )
+            raise ConfigEntryAuthFailed(
+                translation_domain=DOMAIN,
+                translation_key="exceptions.auth_failed",
+            ) from err
+        elif err.status == 429:
+            _LOGGER.warning("Token refresh rate limit hit. Retrying later.")
+            raise ConfigEntryNotReady(
+                translation_domain=DOMAIN,
+                translation_key="exceptions.rate_limit_exceeded",
+            ) from err
+        else:
+            raise ConfigEntryNotReady(
+                translation_domain=DOMAIN,
+                translation_key="exceptions.unexpected_error",
+            ) from err
+
+    except Exception as err:
+        _LOGGER.error("Unexpected error ensuring token valid: %s", err)
+        raise ConfigEntryNotReady(
+            translation_domain=DOMAIN,
+            translation_key="exceptions.unexpected_error",
+        ) from err
+    try:
         await coordinator.async_config_entry_first_refresh()
     except Exception as err:
         _LOGGER.error("Initial refresh failed: %s", err)
@@ -75,7 +104,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     try:
         _LOGGER.debug("Initializing Gateway class...")
-        gateway = DesiGateway(hass, session)
+        gateway = DesiGateway(hass, session, entry)
 
         hass.data[DOMAIN][entry.entry_id] = {
             "session": session,

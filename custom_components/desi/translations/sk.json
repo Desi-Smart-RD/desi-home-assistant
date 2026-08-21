@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Overenie zlyhalo. Skontrolujte prosím konfiguráciu."
+            "message": "Overenie zlyhalo. Skontrolujte svoju konfiguráciu."
         },
         "connection_error": {
-            "message": "Nepodarilo sa nadviazať spojenie so službou Desi Smart: {error}"
+            "message": "Nie je možné komunikovať s Desi Smart: {error}"
         },
         "command_failed": {
             "message": "Odoslanie príkazu zlyhalo! Chyba: {server_msg}"
         },
         "code_required": {
             "message": "Z bezpečnostných dôvodov musíte na odomknutie zadať kód."
+        },
+        "rate_limit_exceeded": {
+            "message": "Bol dosiahnutý limit obnovovania tokenu. Ďalší pokus bude vykonaný neskôr."
         }
     },
     "entity": {
@@ -26,12 +29,18 @@
                 }
             },
             "hub_status": {
-                "name": "Pripojenie k hubu",
+                "name": "Pripojenie k rozbočovaču",
                 "state": {
                     "online": "Pripojené",
                     "offline": "Odpojené"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Nepodporovaná verzia Home Assistant",
+            "description": "Integráciu Desi sa nepodarilo spustiť, pretože vaša verzia Home Assistant je príliš stará.\n\nPodrobnosti: {error_detail}\n\nAktualizujte svoj systém, aby ste tento problém vyriešili."
         }
     }
 }

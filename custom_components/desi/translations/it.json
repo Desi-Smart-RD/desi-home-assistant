@@ -10,7 +10,10 @@
             "message": "Invio del comando non riuscito! Errore: {server_msg}"
         },
         "code_required": {
-            "message": "Per motivi di sicurezza è necessario inserire un codice per lo sblocco."
+            "message": "Per motivi di sicurezza, è necessario inserire un codice per sbloccare."
+        },
+        "rate_limit_exceeded": {
+            "message": "È stato raggiunto il limite di aggiornamento del token. Verrà effettuato un nuovo tentativo più tardi."
         }
     },
     "entity": {
@@ -19,10 +22,10 @@
                 "name": "Livello batteria"
             },
             "lock_status": {
-                "name": "Stato serratura",
+                "name": "Stato della serratura",
                 "state": {
-                    "locked": "Bloccato",
-                    "unlocked": "Sbloccato"
+                    "locked": "Bloccata",
+                    "unlocked": "Sbloccata"
                 }
             },
             "hub_status": {
@@ -32,6 +35,12 @@
                     "offline": "Disconnesso"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Versione di Home Assistant non supportata",
+            "description": "Non è stato possibile avviare l'integrazione Desi perché la versione di Home Assistant è troppo vecchia.\n\nDettagli: {error_detail}\n\nAggiorna il sistema per risolvere il problema."
         }
     }
 }

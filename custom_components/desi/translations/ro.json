@@ -1,37 +1,46 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Autentificare eșuată. Vă rugăm să verificați configurația."
+            "message": "Autentificarea a eșuat. Verificați configurația."
         },
         "connection_error": {
-            "message": "Nu s-a putut comunica cu Desi Smart: {error}"
+            "message": "Nu se poate comunica cu Desi Smart: {error}"
         },
         "command_failed": {
             "message": "Trimiterea comenzii a eșuat! Eroare: {server_msg}"
         },
         "code_required": {
             "message": "Din motive de securitate, trebuie să introduceți un cod pentru deblocare."
+        },
+        "rate_limit_exceeded": {
+            "message": "A fost atinsă limita pentru reîmprospătarea tokenului. Se va încerca din nou mai târziu."
         }
     },
     "entity": {
         "sensor": {
             "battery_status": {
-                "name": "Nivel baterie"
+                "name": "Nivelul bateriei"
             },
             "lock_status": {
-                "name": "Stare încuietoare",
+                "name": "Starea încuietorii",
                 "state": {
-                    "locked": "Blocat",
-                    "unlocked": "Deblocat"
+                    "locked": "Încuiat",
+                    "unlocked": "Descuiat"
                 }
             },
             "hub_status": {
-                "name": "Conexiune hub",
+                "name": "Conexiunea hubului",
                 "state": {
                     "online": "Conectat",
                     "offline": "Deconectat"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Versiune Home Assistant neacceptată",
+            "description": "Integrarea Desi nu a putut fi pornită deoarece versiunea dvs. de Home Assistant este prea veche.\n\nDetalii: {error_detail}\n\nVă rugăm să vă actualizați sistemul pentru a rezolva această problemă."
         }
     }
 }

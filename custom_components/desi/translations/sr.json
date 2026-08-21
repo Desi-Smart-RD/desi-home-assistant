@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Autentifikacija nije uspela. Molimo proverite konfiguraciju."
+            "message": "Autentifikacija nije uspela. Proverite svoju konfiguraciju."
         },
         "connection_error": {
-            "message": "Nije moguće uspostaviti komunikaciju sa Desi Smart: {error}"
+            "message": "Nije moguće komunicirati sa Desi Smart: {error}"
         },
         "command_failed": {
             "message": "Slanje komande nije uspelo! Greška: {server_msg}"
         },
         "code_required": {
             "message": "Iz bezbednosnih razloga morate uneti kod za otključavanje."
+        },
+        "rate_limit_exceeded": {
+            "message": "Dostignuto je ograničenje za osvežavanje tokena. Ponovni pokušaj će biti izvršen kasnije."
         }
     },
     "entity": {
@@ -26,12 +29,18 @@
                 }
             },
             "hub_status": {
-                "name": "Povezanost haba",
+                "name": "Veza sa čvorištem",
                 "state": {
                     "online": "Povezano",
-                    "offline": "Nije povezano"
+                    "offline": "Prekinuta veza"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Nepodržana verzija Home Assistant-a",
+            "description": "Desi integracija nije mogla da se pokrene jer je vaša verzija Home Assistant-a prestara.\n\nDetalji: {error_detail}\n\nAžurirajte sistem da biste rešili ovaj problem."
         }
     }
 }

@@ -4,9 +4,9 @@ import json
 import logging
 
 from homeassistant.components.lock import LockEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryDisabler
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
@@ -28,18 +28,19 @@ async def async_setup_entry(
     coordinator = data_pack["coordinator"]
     devices = coordinator.data.locks
 
-    entities = [DesiLock(session, gateway, device_data) for device_data in devices]
+    entities = [
+        DesiLock(session, gateway, device_data, entry) for device_data in devices
+    ]
 
     async_add_entities(entities)
 
 
 class DesiLock(LockEntity, RestoreEntity):
-    """Representation of a Desi Lock entity."""
 
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, session, gateway, data):
+    def __init__(self, session, gateway, data, entry):
         """Initializing properties."""
         self._session = session
         self._gateway = gateway
@@ -48,6 +49,7 @@ class DesiLock(LockEntity, RestoreEntity):
         self._attr_unique_id = f"desi_lock_{self._device_id}"
         self._is_locking = False
         self._is_unlocking = False
+        self.entry = entry
 
     async def async_added_to_hass(self) -> None:
         """Register callbacks when entity is added to Home Assistant."""
@@ -152,18 +154,21 @@ class DesiLock(LockEntity, RestoreEntity):
     async def _send_command(self, operation_type, code):
         """Send command to the API."""
         url = f"{FULLFILMENT_API_URI}/lock-unlock-command"
-        await self._session.async_ensure_token_valid()
-        access_token = self._session.token["access_token"]
 
-        _LOGGER.debug(
-            "Sending command to API: %s, code: %s, access_token: %s",
-            operation_type,
-            code,
-            access_token,
-        )
+        try:
+            await self._session.async_ensure_token_valid()
+        except Exception as err:
+            if getattr(err, "status", None) == 429:
+                _LOGGER.warning("Token refresh rate limit hit. Retrying later.")
+                self.entry.disabled_by = ConfigEntryDisabler.USER
+                raise ConfigEntryNotReady(
+                    translation_domain=DOMAIN,
+                    translation_key="exceptions.rate_limit_exceeded"
+                ) from err
+
+            raise
 
         payload = {
-            "token": access_token,
             "smartLockId": self._device_id,
             "smartLockOperation": operation_type,
             "smartLockCode": str(code) if code else "",

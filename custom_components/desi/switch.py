@@ -6,12 +6,13 @@ import json
 import logging
 
 from homeassistant.components.switch import SwitchEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryDisabler
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .const import DOMAIN, FULLFILMENT_API_URI, OnlineStatus, SwitchStatus
 
@@ -31,8 +32,9 @@ async def async_setup_entry(
     coordinator = data_pack["coordinator"]
     devices = coordinator.data.switches
 
-
-    entities = [DesiSwitch(session, gateway, device_data) for device_data in devices]
+    entities = [
+        DesiSwitch(session, gateway, device_data, entry) for device_data in devices
+    ]
 
     async_add_entities(entities, update_before_add=True)
 
@@ -43,13 +45,14 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
     _attr_has_entity_name = True
     _attr_name = None
 
-    def __init__(self, session, gateway, data):
+    def __init__(self, session, gateway, data, entry):
         """Initializing properties."""
         self._session = session
         self._gateway = gateway
         self._data = data
         self._device_id = str(data.get("deviceId"))
         self._attr_unique_id = f"desi_switch_{self._device_id}"
+        self.entry = entry
 
     @property
     def device_info(self):
@@ -59,7 +62,7 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
             "name": self._data.get("deviceName", "Desi Switch"),
             "manufacturer": "Desi Smart Lock and Security Systems",
             "model": self._data.get("deviceModel"),
-            "suggested_area": self._data.get("deviceName")
+            "suggested_area": self._data.get("deviceName"),
         }
 
     async def async_added_to_hass(self) -> None:
@@ -97,25 +100,29 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
             return False
         return val == OnlineStatus.ONLINE
 
-
     @property
     def should_poll(self) -> bool:
         """Disable pooling. Websocket drives updates."""
         return False
 
-
     async def _send_command(self, operation_type):
         """Send command to API."""
         url = f"{FULLFILMENT_API_URI}/on-off-command"
 
-        await self._session.async_ensure_token_valid()
-        access_token = self._session.token["access_token"]
+        try:
+            await self._session.async_ensure_token_valid()
+        except Exception as err:
+            if getattr(err, "status", None) == 429:
+                _LOGGER.warning("Token refresh rate limit hit. Retrying later.")
+                self.entry.disabled_by = ConfigEntryDisabler.USER
+                raise UpdateFailed(
+                    translation_domain=DOMAIN,
+                    translation_key="exceptions.rate_limit_exceeded"
+                ) from err
 
-        payload = {
-            "token": access_token,
-            "switchId": self._device_id,
-            "switchOperation": operation_type
-        }
+            raise
+
+        payload = {"switchId": self._device_id, "switchOperation": operation_type}
 
         resp = await self._session.async_request("POST", url, json=payload)
 
@@ -142,14 +149,12 @@ class DesiSwitch(SwitchEntity, RestoreEntity):
                 translation_placeholders={"server_msg": msg_text},
             )
 
-
     async def async_turn_on(self, **kwargs):
         """Turn the switch on."""
         _LOGGER.info("async_turn_on")
         await self._send_command("ON")
         self._data["status"] = SwitchStatus.ON
         self.async_write_ha_state()
-
 
     async def async_turn_off(self, **kwargs):
         """Turn the switch off."""

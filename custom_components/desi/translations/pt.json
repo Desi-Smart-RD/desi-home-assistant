@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Falha na autenticação. Por favor, verifique a configuração."
+            "message": "A autenticação falhou. Verifique a sua configuração."
         },
         "connection_error": {
             "message": "Não foi possível comunicar com o Desi Smart: {error}"
         },
         "command_failed": {
-            "message": "Falha ao enviar comando! Erro: {server_msg}"
+            "message": "Falha ao enviar o comando! Erro: {server_msg}"
         },
         "code_required": {
-            "message": "Por motivos de segurança, deve introduzir um código para desbloquear."
+            "message": "Por motivos de segurança, é necessário introduzir um código para desbloquear."
+        },
+        "rate_limit_exceeded": {
+            "message": "O limite de atualização do token foi atingido. Uma nova tentativa será feita mais tarde."
         }
     },
     "entity": {
@@ -21,17 +24,23 @@
             "lock_status": {
                 "name": "Estado da fechadura",
                 "state": {
-                    "locked": "Bloqueado",
-                    "unlocked": "Desbloqueado"
+                    "locked": "Bloqueada",
+                    "unlocked": "Desbloqueada"
                 }
             },
             "hub_status": {
-                "name": "Ligação do hub",
+                "name": "Ligação ao hub",
                 "state": {
                     "online": "Ligado",
                     "offline": "Desligado"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Versão do Home Assistant não suportada",
+            "description": "Não foi possível iniciar a integração Desi porque a sua versão do Home Assistant é demasiado antiga.\n\nDetalhes: {error_detail}\n\nAtualize o seu sistema para resolver este problema."
         }
     }
 }

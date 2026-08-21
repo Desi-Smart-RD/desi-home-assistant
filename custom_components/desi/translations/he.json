@@ -1,7 +1,7 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "האימות נכשל. אנא בדקו את ההגדרות."
+            "message": "האימות נכשל. אנא בדוק את התצורה שלך."
         },
         "connection_error": {
             "message": "לא ניתן לתקשר עם Desi Smart: {error}"
@@ -10,28 +10,37 @@
             "message": "שליחת הפקודה נכשלה! שגיאה: {server_msg}"
         },
         "code_required": {
-            "message": "מטעמי אבטחה יש להזין קוד לפתיחה."
+            "message": "מטעמי אבטחה, עליך להזין קוד כדי לפתוח את הנעילה."
+        },
+        "rate_limit_exceeded": {
+            "message": "הגעת למגבלת רענון האסימון. ניסיון נוסף יתבצע מאוחר יותר."
         }
     },
     "entity": {
         "sensor": {
             "battery_status": {
-                "name": "רמת סוללה"
+                "name": "רמת הסוללה"
             },
             "lock_status": {
-                "name": "מצב מנעול",
+                "name": "מצב המנעול",
                 "state": {
                     "locked": "נעול",
                     "unlocked": "לא נעול"
                 }
             },
             "hub_status": {
-                "name": "חיבור רכזת",
+                "name": "חיבור לרכזת",
                 "state": {
                     "online": "מחובר",
                     "offline": "מנותק"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "גרסה לא נתמכת של Home Assistant",
+            "description": "לא ניתן היה להפעיל את האינטגרציה של Desi מכיוון שגרסת Home Assistant שלך ישנה מדי.\n\nפרטים: {error_detail}\n\nאנא עדכן את המערכת שלך כדי לפתור בעיה זו."
         }
     }
 }

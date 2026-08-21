@@ -14,87 +14,48 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class DesiDataUpdateCoordinator(DataUpdateCoordinator):
-    """Desi Data update coordinator."""
 
     def __init__(self, hass, session, entry):
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=None)
         self.session = session
         self.entry = entry
 
+    async def _fetch_endpoint_data(self, endpoint: str, data_key: str) -> list:
+        try:
+            response = await self.session.async_request(
+                "POST", f"{FULLFILMENT_API_URI}/{endpoint}"
+            )
+            if response.status == 429:
+                _LOGGER.warning(
+                    "Rate limit hit! Disabling integration. The API that retrieves devices "
+                    "can be called a maximum of 15 times per day. To prevent server load, "
+                    "further requests are stopped."
+                )
+                self.entry.disabled_by = ConfigEntryDisabler.USER
+                raise UpdateFailed(
+                        translation_domain=DOMAIN,
+                        translation_key="exceptions.rate_limit_exceeded"
+                    )
+
+            response.raise_for_status()
+            json_data = await response.json()
+            return json_data.get("data", {}).get(data_key, [])
+
+        except UpdateFailed:
+            raise
+        except Exception as e:
+
+            _LOGGER.warning(f"Failed to retrieve {data_key} data, skipping: {e}")
+            return []
+
     async def _async_update_data(self):
-
-        locks_data = []
-        alarms_data = []
-        switches_data = []
-
         try:
             async with async_timeout.timeout(15):
-                try:
-                    lockResponse = await self.session.async_request(
-                        "POST", f"{FULLFILMENT_API_URI}/get-locks"
-                    )
-                    if lockResponse.status == 429:
-                        _LOGGER.critical(
-                            "Rate limit hit! Disabling integration. The API that retrieves devices can be called a maximum of 15 times per day. If more than 15 requests are made, Home Assistant will be disabled for the rest of the day. This limitation is implemented to prevent continuous polling and reduce server load."
-                        )
-                        self.entry.disabled_by = ConfigEntryDisabler.USER
-                        await self.hass.config_entries.async_unload(self.entry.entry_id)
-                        raise UpdateFailed(
-                            "429 Too Many Requests - Integration disabled."
-                        )
-
-                    lockResponse.raise_for_status()
-                    locks_json = await lockResponse.json()
-                    locks_data = locks_json.get("data", {}).get("locks", [])
-
-                except UpdateFailed:
-                    raise
-                except Exception as e:
-                    _LOGGER.warning(f"Failed to retrieve smart lock data, skipping: {e}")
-                try:
-                    alarmResponse = await self.session.async_request(
-                        "POST", f"{FULLFILMENT_API_URI}/get-alarms"
-                    )
-
-                    if alarmResponse.status == 429:
-                        _LOGGER.critical(
-                            "Rate limit hit! Disabling integration. The API that retrieves devices can be called a maximum of 15 times per day. If more than 15 requests are made, Home Assistant will be disabled for the rest of the day. This limitation is implemented to prevent continuous polling and reduce server load."
-                        )
-                        self.entry.disabled_by = ConfigEntryDisabler.USER
-                        await self.hass.config_entries.async_unload(self.entry.entry_id)
-                        raise UpdateFailed(
-                            "429 Too Many Requests - Integration disabled."
-                        )
-                    alarmResponse.raise_for_status()
-                    alarm_json = await alarmResponse.json()
-                    alarms_data = alarm_json.get("data", {}).get("alarms", [])
-
-                except UpdateFailed:
-                    raise
-                except Exception as e:
-                    _LOGGER.warning(f"Failed to retrieve alarm data, skipping: {e}")
-
-                try:
-                    switchResponse = await self.session.async_request(
-                        "POST", f"{FULLFILMENT_API_URI}/get-switches"
-                    )
-
-                    if switchResponse.status == 429:
-                        _LOGGER.critical(
-                            "Rate limit hit! Disabling integration. The API that retrieves devices can be called a maximum of 15 times per day. If more than 15 requests are made, Home Assistant will be disabled for the rest of the day. This limitation is implemented to prevent continuous polling and reduce server load."
-                        )
-                        await self.hass.config_entries.async_unload(self.entry.entry_id)
-                        raise UpdateFailed(
-                            "429 Too Many Requests - Integration disabled."
-                        )
-                    switchResponse.raise_for_status()
-                    switch_json = await switchResponse.json()
-                    switches_data = switch_json.get("data", {}).get("switches", [])
-
-                except UpdateFailed:
-                    raise
-                except Exception as e:
-                    _LOGGER.warning(f"Failed to retrieve switch data, skipping: {e}")
+                locks_data = await self._fetch_endpoint_data("get-locks", "locks")
+                alarms_data = await self._fetch_endpoint_data("get-alarms", "alarms")
+                switches_data = await self._fetch_endpoint_data(
+                    "get-switches", "switches"
+                )
 
                 return SimpleNamespace(
                     locks=locks_data,
@@ -105,4 +66,4 @@ class DesiDataUpdateCoordinator(DataUpdateCoordinator):
         except UpdateFailed:
             raise
         except Exception as err:
-            raise UpdateFailed(f"Desi API general error or timeout: {err}")
+            raise UpdateFailed(f"General error: {err}")

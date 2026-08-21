@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Kimlik doğrulama uğursuz oldu. Zəhmət olmasa konfiqurasiyanı yoxlayın."
+            "message": "Kimlik doğrulama başarısız oldu. Lütfen yapılandırmanızı kontrol edin."
         },
         "connection_error": {
-            "message": "Desi Smart ilə əlaqə qurula bilmədi: {error}"
+            "message": "Desi Smart ile iletişim kurulamadı: {error}"
         },
         "command_failed": {
-            "message": "Komanda göndərilə bilmədi! Xəta: {server_msg}"
+            "message": "Komut gönderilemedi! Hata: {server_msg}"
         },
         "code_required": {
-            "message": "Təhlükəsizlik səbəbilə kilidi açmaq üçün kod daxil etməlisiniz."
+            "message": "Təhlükəsizlik səbəblərinə görə kilidi açmaq üçün kod daxil etməlisiniz."
+        },
+        "rate_limit_exceeded": {
+            "message": "Token yeniləmə limitinə çatıldı. Daha sonra yenidən cəhd ediləcək."
         }
     },
     "entity": {
@@ -19,9 +22,9 @@
                 "name": "Batareya səviyyəsi"
             },
             "lock_status": {
-                "name": "Kilid vəziyyəti",
+                "name": "Kilidin vəziyyəti",
                 "state": {
-                    "locked": "Kilidlənib",
+                    "locked": "Kilidli",
                     "unlocked": "Kilidsiz"
                 }
             },
@@ -29,9 +32,15 @@
                 "name": "Hub bağlantısı",
                 "state": {
                     "online": "Qoşulub",
-                    "offline": "Bağlantı yoxdur"
+                    "offline": "Qoşulmayıb"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Dəstəklənməyən Home Assistant versiyası",
+            "description": "Home Assistant versiyanız çox köhnə olduğu üçün Desi inteqrasiyasını işə salmaq mümkün olmadı.\n\nTəfərrüatlar: {error_detail}\n\nBu problemi həll etmək üçün sisteminizi yeniləyin."
         }
     }
 }

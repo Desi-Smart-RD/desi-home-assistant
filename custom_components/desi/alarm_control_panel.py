@@ -10,9 +10,9 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelState,
     CodeFormat,
 )
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryDisabler
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.restore_state import RestoreEntity
 
@@ -27,6 +27,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -39,7 +40,9 @@ async def async_setup_entry(
     coordinator = data_pack["coordinator"]
     devices = coordinator.data.alarms
 
-    entities = [DesiAlarm(session, gateway, device_data) for device_data in devices]
+    entities = [
+        DesiAlarm(session, gateway, device_data, entry) for device_data in devices
+    ]
 
     async_add_entities(entities, update_before_add=True)
 
@@ -49,7 +52,7 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
 
     _attr_code_arm_required = False
 
-    def __init__(self, session: Any, gateway: Any, data: dict[str, Any]) -> None:
+    def __init__(self, session, gateway, data, entry) -> None:
         """Initialize the alarm entity."""
         self._session = session
         self._gateway = gateway
@@ -58,6 +61,7 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
         self._attr_unique_id = f"desi_alarm_{self._device_id}"
         self._attr_has_entity_name = True
         self._attr_name = None
+        self.entry = entry
 
     @property
     def supported_features(self) -> AlarmControlPanelEntityFeature:
@@ -84,7 +88,6 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
 
     @property
     def state(self) -> AlarmControlPanelState | None:
-        """Map the raw device status to Home Assistant alarm states."""
         try:
             status = int(self._data.get("status", -1))
             ringing = int(self._data.get("isRinging", 0))
@@ -97,9 +100,15 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
         if status == AlarmStatus.DISARMED:
             return AlarmControlPanelState.DISARMED
         if status == AlarmStatus.ARMED:
-            if is_armed_away_mode == AlarmModes.MODE_AWAY and ringing == RingingStatus.RINGING_OFF:
+            if (
+                is_armed_away_mode == AlarmModes.MODE_AWAY
+                and ringing == RingingStatus.RINGING_OFF
+            ):
                 return AlarmControlPanelState.ARMED_AWAY
-            if is_armed_away_mode == AlarmModes.MODE_STAY_ARMED and ringing == RingingStatus.RINGING_OFF:
+            if (
+                is_armed_away_mode == AlarmModes.MODE_STAY_ARMED
+                and ringing == RingingStatus.RINGING_OFF
+            ):
                 return AlarmControlPanelState.ARMED_HOME
 
         return None
@@ -154,10 +163,20 @@ class DesiAlarm(AlarmControlPanelEntity, RestoreEntity):
     async def _send_command(self, operation_type: str, code: str | None = None) -> None:
         """Send a control command to the API."""
         url = f"{FULLFILMENT_API_URI}/alarm-command"
-        await self._session.async_ensure_token_valid()
-        access_token = self._session.token["access_token"]
+        try:
+            await self._session.async_ensure_token_valid()
+        except Exception as err:
+            if getattr(err, "status", None) == 429:
+                _LOGGER.warning("Token refresh rate limit hit. Retrying later.")
+                self.entry.disabled_by = ConfigEntryDisabler.USER
+                raise ConfigEntryNotReady(
+                    translation_domain=DOMAIN,
+                    translation_key="exceptions.rate_limit_exceeded"
+                ) from err
+
+            raise
+
         payload = {
-            "token": access_token,
             "alarmId": self._device_id,
             "alarmOperation": operation_type,
             "alarmCode": code,

@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Preverjanje pristnosti ni uspelo. Prosimo, preverite konfiguracijo."
+            "message": "Preverjanje pristnosti ni uspelo. Preverite svojo konfiguracijo."
         },
         "connection_error": {
-            "message": "Ni mogoče vzpostaviti povezave z Desi Smart: {error}"
+            "message": "Komunikacija z Desi Smart ni mogoča: {error}"
         },
         "command_failed": {
             "message": "Pošiljanje ukaza ni uspelo! Napaka: {server_msg}"
         },
         "code_required": {
-            "message": "Iz varnostnih razlogov morate za odklep vnesti kodo."
+            "message": "Iz varnostnih razlogov morate za odklepanje vnesti kodo."
+        },
+        "rate_limit_exceeded": {
+            "message": "Dosežena je bila omejitev osveževanja žetona. Poskus bo ponovljen pozneje."
         }
     },
     "entity": {
@@ -26,12 +29,18 @@
                 }
             },
             "hub_status": {
-                "name": "Povezava z vozliščem",
+                "name": "Povezava z zvezdiščem",
                 "state": {
                     "online": "Povezano",
-                    "offline": "Nepovezano"
+                    "offline": "Prekinjena povezava"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Nepodprta različica Home Assistant",
+            "description": "Integracije Desi ni bilo mogoče zagnati, ker je vaša različica Home Assistant prestara.\n\nPodrobnosti: {error_detail}\n\nPosodobite sistem, da odpravite to težavo."
         }
     }
 }

@@ -1,16 +1,19 @@
 {
     "exceptions": {
         "auth_failed": {
-            "message": "Échec de l’authentification. Veuillez vérifier la configuration."
+            "message": "Échec de l'authentification. Veuillez vérifier votre configuration."
         },
         "connection_error": {
             "message": "Impossible de communiquer avec Desi Smart : {error}"
         },
         "command_failed": {
-            "message": "Échec de l’envoi de la commande ! Erreur : {server_msg}"
+            "message": "Échec de l'envoi de la commande ! Erreur : {server_msg}"
         },
         "code_required": {
             "message": "Pour des raisons de sécurité, vous devez saisir un code pour déverrouiller."
+        },
+        "rate_limit_exceeded": {
+            "message": "La limite d'actualisation du jeton a été atteinte. Une nouvelle tentative sera effectuée ultérieurement."
         }
     },
     "entity": {
@@ -19,7 +22,7 @@
                 "name": "Niveau de batterie"
             },
             "lock_status": {
-                "name": "État du verrou",
+                "name": "État de la serrure",
                 "state": {
                     "locked": "Verrouillé",
                     "unlocked": "Déverrouillé"
@@ -32,6 +35,12 @@
                     "offline": "Déconnecté"
                 }
             }
+        }
+    },
+    "issues": {
+        "unsupported_version": {
+            "title": "Version de Home Assistant non prise en charge",
+            "description": "L'intégration Desi n'a pas pu être démarrée, car votre version de Home Assistant est trop ancienne.\n\nDétails : {error_detail}\n\nVeuillez mettre à jour votre système pour résoudre ce problème."
         }
     }
 }
